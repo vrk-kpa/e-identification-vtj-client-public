@@ -1,0 +1,21 @@
+- name: Fill vtj-client.properties
+  template: src={{ tempdir }}/service.properties.template dest={{ tempdir }}/filled/vtj-client.properties
+
+- name: Fill logback.xml.template
+  template: src={{ tempdir }}/logback.xml.template dest={{ tempdir }}/filled/logback.xml
+
+- name: Copy keystore
+  local_action: copy src={{ confdir }}/vtjcertstore.jks dest={{ tempdir }}/filled/vtjcertstore.jks
+
+- name: Copy tomcat keystore
+  local_action: copy src={{ conf_root }}/certs/{{ host }}/tomcat_keystore dest={{ tempdir }}/filled/tomcat_keystore
+
+- name: Copy xroadTrustStore
+  local_action: copy src={{ confdir }}/xroadTrustStore dest={{ tempdir }}/filled/xroadTrustStore
+
+- name: Startup script
+  template: src={{ confdir }}/cmd.sh.template dest={{ tempdir }}/filled/cmd.sh
+
+- name: Create filled template tar
+  local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .
+  delegate_to: localhost
