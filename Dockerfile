@@ -1,6 +1,5 @@
 #FROM e-identification-java-base-image
 FROM dev-docker-registry.kapa.ware.fi/e-identification-base-java-service
-COPY License.info /License.info
 COPY target/site /site
 
 # Define JAVA_HOME
