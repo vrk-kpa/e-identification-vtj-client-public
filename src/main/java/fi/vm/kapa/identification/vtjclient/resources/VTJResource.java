@@ -22,7 +22,7 @@
  */
 package fi.vm.kapa.identification.vtjclient.resources;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,6 +35,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
@@ -43,8 +44,13 @@ import fi.vm.kapa.identification.vtjclient.service.VTJService;
 @Path("/vtj")
 public class VTJResource {
 
-    @Inject
     private VTJService service;
+
+    @Autowired
+    public VTJResource(@Named("vtjService") VTJService service) {
+        this.service = service;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/person/{identifier}/{identifierType}")

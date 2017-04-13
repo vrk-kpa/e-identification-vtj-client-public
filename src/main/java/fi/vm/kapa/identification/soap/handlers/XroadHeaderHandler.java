@@ -101,6 +101,12 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext>, Spri
     @Value(SERVICE_SERVICE_CODE)
     private String serviceServiceCode;
 
+    @Value(SERVICE_SERVICE_VERSION)
+    private String serviceServiceVersion;
+
+    @Value(XROAD_PROTOCOL_VERSION)
+    private String xroadProtocolVersion;
+
     public boolean handleMessage(SOAPMessageContext messageContext) {
         Boolean outboundProperty = (Boolean) messageContext
                 .get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -157,10 +163,14 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext>, Spri
                 service.setMemberCode(this.serviceMemberCode);
                 service.setSubsystemCode(this.serviceSubsystemCode);
                 service.setServiceCode(this.serviceServiceCode);
-                service.setServiceVersion("v1");
+                service.setServiceVersion(this.serviceServiceVersion);
 
                 marshaller = JAXBContext.newInstance(Service.class).createMarshaller();
                 marshaller.marshal(serviceElement, header);
+
+                JAXBElement<String> protocolVersionElement = factory.createProtocolVersion(this.xroadProtocolVersion);
+                SOAPHeaderElement protocolVersionHeaderElement = header.addHeaderElement(protocolVersionElement.getName());
+                protocolVersionHeaderElement.addTextNode((String) protocolVersionElement.getValue());
 
                 soapMsg.saveChanges();
 

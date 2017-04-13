@@ -7,6 +7,7 @@ vtj_ca={{ vtj_ca }}
 vtj_ca_validity={{ vtj_ca_validity }}
 vtj_ca_blacklisted={{ vtj_ca_blacklisted }}
 # open ssh tunnel via this address to our xroad6 server
+xroad_protocol_version={{ xroad_protocol_version }}
 xroad_endpoint={{ xroad_endpoint }}
 xroad_connectivity_keystore_path={{ xroad_connectivity_keystore_path }}
 xroad_connectivity_keystore_pw={{ xroad_connectivity_keystore_pw }}
@@ -51,3 +52,9 @@ client_member_class={{ client_member_class }}
 client_member_code={{ client_member_code }}
 # ROVA_SUBSYSTEM_CODE defines the name of the caller subsystem on X-road
 client_subsystem_code={{ client_subsystem_code }}
+
+# for performance & load testing without real VTJ
+vtjclient_dummydata={{vtj_dummydata | default('false')}}
+vtjclient_dummydata_defaultHetu={{vtj_dummydata_hetu | default('010191-9630')}}
+vtjclient_dummydata_sleep={{vtj_dummydata_sleep | default('2000')}}
+

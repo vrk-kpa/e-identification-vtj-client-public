@@ -22,9 +22,34 @@
  */
 package fi.vm.kapa.identification.vtjclient.service;
 
+import fi.vm.kapa.identification.test.DummyPersonService;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
+import org.junit.Before;
+import org.junit.Test;
 
-public interface VTJService {
-    VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String IssuerDn);
+import static fi.vm.kapa.identification.type.Identifier.Types.HETU;
+import static fi.vm.kapa.identification.type.Identifier.Types.SATU;
+import static org.junit.Assert.*;
+
+public class DummyVTJServiceTest {
+    private DummyVTJService service;
+
+    @Before
+    public void setUp() throws Exception {
+        service = new DummyVTJService(new DummyPersonService("010191-9630"), 0);
+    }
+
+    @Test
+    public void getVTJResponseReturnsPersonWithGivenHetu() throws Exception {
+        VTJResponse response = service.getVTJResponse("010191-9663", HETU, null);
+        assertEquals("010191-9663", response.getPerson().getHetu());
+    }
+
+    @Test
+    public void getVTJResponseReturnsPersonWithGivenSatu() throws Exception {
+        VTJResponse response = service.getVTJResponse("999196993", SATU, null);
+        assertEquals("010191-9630", response.getPerson().getHetu());
+    }
+
 }
