@@ -23,26 +23,28 @@
 package fi.vm.kapa.identification.vtjclient.resources;
 
 import javax.inject.Named;
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import fi.vm.kapa.identification.type.Identifier;
-import fi.vm.kapa.identification.vtj.model.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fi.vm.kapa.identification.logging.Logger;
+import fi.vm.kapa.identification.type.Identifier;
+import fi.vm.kapa.identification.vtj.model.VTJResponse;
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
 
 @Service
 @Path("/vtj")
 public class VTJResource {
+	
+	private static Logger LOG = Logger.getLogger(VTJResource.class, Logger.VTJ_CLIENT);
 
     private VTJService service;
 
@@ -51,10 +53,14 @@ public class VTJResource {
         this.service = service;
     }
 
-    @GET
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/person/{identifier}/{identifierType}")
-    public Response getPerson(@PathParam("identifier") String identifier, @PathParam("identifierType") Identifier.Types identifierType, @QueryParam("issuerDn") String issuerDn) {
+    @Path("/person")
+    public Response getPerson(
+    		@FormParam(value = "identifier") String identifier,
+    		@FormParam(value = "identifierType") Identifier.Types identifierType,
+    		@FormParam(value = "issuerDn") String issuerDn) {
         try {
             VTJResponse vtjResponse = service.getVTJResponse(identifier, identifierType, issuerDn);
             if ( vtjResponse.isSuccess() && vtjResponse.getError() == null ) {
