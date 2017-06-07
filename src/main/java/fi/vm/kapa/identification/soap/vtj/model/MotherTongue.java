@@ -1,10 +1,11 @@
 package fi.vm.kapa.identification.soap.vtj.model;
 
-import javax.xml.bind.annotation.XmlAccessorType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @XmlRootElement(name = "Aidinkieli")
@@ -14,11 +15,11 @@ public class MotherTongue {
     @JsonIgnore
     @XmlElement(name = "AidinkieliTietokoodi")
     private StringNode motherTongueCode;
-    
+
     @JsonIgnore
     @XmlElement(name = "Kielikoodi")
     private StringNode languageCode;
-        
+
     @JsonIgnore
     @XmlElement(name = "KieliS")
     private StringNode languageS;
@@ -26,12 +27,12 @@ public class MotherTongue {
     @JsonIgnore
     @XmlElement(name = "KieliR")
     private StringNode languageR;
-        
+
     @JsonIgnore
     @XmlElement(name = "KieliSelvakielinen")
     private StringNode languageClearText;
 
-   
+
     public StringNode getMotherTongueCode() {
         return motherTongueCode;
     }
@@ -70,6 +71,12 @@ public class MotherTongue {
 
     public void setLanguageClearText(StringNode languageClearText) {
         this.languageClearText = languageClearText;
+    }
+
+    @Override
+    public String toString() {
+        return "MotherTongue [motherTongueCode=" + motherTongueCode + ", languageCode=" + languageCode + ", languageS="
+                + languageS + ", languageR=" + languageR + ", languageClearText=" + languageClearText + "]";
     }
 }
 

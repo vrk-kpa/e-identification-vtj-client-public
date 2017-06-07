@@ -22,17 +22,16 @@
  */
 package fi.vm.kapa.identification.rest.identification;
 
-import java.io.IOException;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
-
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import java.io.IOException;
 
 @Provider
 @PreMatching
@@ -43,14 +42,16 @@ public class RequestIdentificationFilter implements ClientRequestFilter {
 
     private String requestId;
     private String endUserId;
-    
-    public RequestIdentificationFilter() {}
-    
+
+    public RequestIdentificationFilter() {
+    	// Default constructor
+    }
+
     public RequestIdentificationFilter(String requestId, String endUserId) {
         this.requestId = requestId;
         this.endUserId = endUserId;
     }
-    
+
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
         filter(XROAD_REQUEST_IDENTIFIER, requestContext, requestId);
@@ -78,7 +79,7 @@ public class RequestIdentificationFilter implements ClientRequestFilter {
     }
 
     private void replaceHeaderValue(String headerName,
-            ClientRequestContext requestContext, String value) {
+                                    ClientRequestContext requestContext, String value) {
         requestContext.getHeaders().remove(headerName);
         requestContext.getHeaders().add(headerName, value);
     }

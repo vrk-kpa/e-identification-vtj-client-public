@@ -22,50 +22,59 @@
  */
 package fi.vm.kapa.identification.soap.vtj.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement(name = "VTJHenkiloVastaussanoma", namespace = "http://xml.vrk.fi/schema/vtjkysely")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VTJResponseMessage {
 
     @XmlElement(name = "Henkilo")
-    private Person person;
+    private SOAPPersonAdapter soapPerson;
 
     @XmlElement(name = "Paluukoodi")
     private ResponseCode responseCode;
 
-    @XmlAttribute(name="sanomatunnus")
+    @XmlAttribute(name = "sanomatunnus")
     private String msgIdentifier;
-    
+
     @XmlAttribute(name = "tietojenPoimintaaika")
     private String dataTimeStamp;
 
     @XmlAttribute(name = "versio")
     private String version;
-    
+
     @JsonIgnore
     @XmlAttribute(name = "faultCode")
     private String faultCode;
-        
-    @XmlElement(name="Asiakasinfo")
-    private String customerInfo;
-        
-    @XmlElement(name="Hakuperusteet")
+
+    @JsonIgnore
+    @XmlAttribute(name = "faultString")
+    private String faultString;
+
+    @XmlElement(name = "Asiakasinfo")
+    private CustomerInfo customerInfo;
+
+
+    @XmlElement(name = "Hakuperusteet")
     private Reason reason;
-    
-        
+
+
     public String getFaultCode() {
         return faultCode;
     }
 
     public void setFaultCode(String faultCode) {
         this.faultCode = faultCode;
+    }
+
+    public String getFaultString() {
+        return faultString;
+    }
+
+    public void setFaultString(String faultString) {
+        this.faultString = faultString;
     }
 
     public String getDataTimeStamp() {
@@ -84,12 +93,12 @@ public class VTJResponseMessage {
         this.version = version;
     }
 
-    public Person getPerson() {
-        return person;
+    public SOAPPersonAdapter getSoapPerson() {
+        return soapPerson;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setSoapPerson(SOAPPersonAdapter soapPerson) {
+        this.soapPerson = soapPerson;
     }
 
     public ResponseCode getResponseCode() {
@@ -108,11 +117,19 @@ public class VTJResponseMessage {
         this.msgIdentifier = msgIdentifier;
     }
 
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
+    }
+
+    public void setCustomerInfo(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
+    }
+
     @Override
     public String toString() {
-        return "VTJResponseMessage [person=" + person + ", responseCode="
+        return "VTJResponseMessage [soapPerson=" + soapPerson + ", responseCode="
                 + responseCode + ", dataTimeStamp=" + dataTimeStamp
-                + ", version=" + version + "]";
+                + ", version=" + version + ", faultCode=" + faultCode + ", faultString=" + faultString + "]";
     }
 
 }

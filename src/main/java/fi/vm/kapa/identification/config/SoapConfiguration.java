@@ -24,9 +24,6 @@ package fi.vm.kapa.identification.config;
 
 import fi.vm.kapa.identification.soap.handlers.XroadHeaderHandler;
 import fi.vrk.xml.ws.vtj.vtjkysely._1.ISoSoAdapterService60;
-
-import org.apache.cxf.clustering.LoadDistributorFeature;
-import org.apache.cxf.clustering.SequentialStrategy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +31,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.xml.ws.BindingProvider;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +51,12 @@ public class SoapConfiguration {
     @Autowired
     private XroadHeaderHandler xroadHeaderHandler;
 
+
     @Bean
     ISoSoAdapterService60 vtjClient() {
         JaxWsProxyFactoryBean jaxWsProxyFactoryBean = buildJaxWsProxyFactoryBean();
         ISoSoAdapterService60 iSoSoAdapterService60 = (ISoSoAdapterService60) jaxWsProxyFactoryBean.create();
-        Map<String, Object> requestContext = ((BindingProvider) iSoSoAdapterService60).getRequestContext();
+        Map<String,Object> requestContext = ((BindingProvider) iSoSoAdapterService60).getRequestContext();
         // for options, see http://stackoverflow.com/questions/13967069/how-to-set-timeout-for-jax-ws-webservice-call
         requestContext.put("javax.xml.ws.client.connectionTimeout", vtjConnectTimeout);
         requestContext.put("javax.xml.ws.client.receiveTimeout", vtjReceiveTimeout);
@@ -69,13 +66,10 @@ public class SoapConfiguration {
     private JaxWsProxyFactoryBean buildJaxWsProxyFactoryBean() {
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
 
-        LoadDistributorFeature loadDistributorFeature = new LoadDistributorFeature();
-        SequentialStrategy ldStrategy = new SequentialStrategy();
-        ldStrategy.setAlternateAddresses(getEndpoints());
-        loadDistributorFeature.setStrategy(ldStrategy);
-        factory.getFeatures().add(loadDistributorFeature);
+        factory.setAddress(getEndpoints().get(0));
 
         factory.getHandlers().add(xroadHeaderHandler);
+
         factory.setServiceClass(ISoSoAdapterService60.class);
 
         return factory;
@@ -83,8 +77,7 @@ public class SoapConfiguration {
 
     private List<String> getEndpoints() {
         String[] endpoints = xroadEndpoints.split(",");
-        List<String> list = Arrays.asList(endpoints);
-        return list;
+        return Arrays.asList(endpoints);
     }
 
 }

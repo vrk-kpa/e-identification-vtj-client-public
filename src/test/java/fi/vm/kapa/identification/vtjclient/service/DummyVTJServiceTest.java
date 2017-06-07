@@ -23,14 +23,13 @@
 package fi.vm.kapa.identification.vtjclient.service;
 
 import fi.vm.kapa.identification.test.DummyPersonService;
-import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
 import org.junit.Before;
 import org.junit.Test;
 
 import static fi.vm.kapa.identification.type.Identifier.Types.HETU;
 import static fi.vm.kapa.identification.type.Identifier.Types.SATU;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DummyVTJServiceTest {
     private DummyVTJService service;

@@ -32,6 +32,14 @@ public class StringNode {
     @XmlValue
     private String value;
 
+    public StringNode(String value) {
+        this.value = value;
+    }
+
+    public StringNode() {
+    	// UncommentedEmptyConstructor required by javax.xml
+    }
+
     public String getValue() {
         return value;
     }

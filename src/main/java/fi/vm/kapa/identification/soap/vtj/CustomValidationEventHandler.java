@@ -22,22 +22,22 @@
  */
 package fi.vm.kapa.identification.soap.vtj;
 
+import fi.vm.kapa.identification.logging.Logger;
+
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
-import fi.vm.kapa.identification.logging.Logger;
-
 public class CustomValidationEventHandler implements ValidationEventHandler {
 
-    private static Logger LOG = Logger.getLogger(CustomValidationEventHandler.class, Logger.VTJ_CLIENT);
+    private static Logger log = Logger.getLogger(CustomValidationEventHandler.class, Logger.VTJ_CLIENT);
 
     @Override
     public boolean handleEvent(ValidationEvent event) {
-        LOG.debug("Event Info: " + event);
+        log.debug("Event Info: " + event);
         if (event.getMessage().contains("unexpected element")) {
-            LOG.debug("Unexpected element found: " + event);
+            log.debug("Unexpected element found: " + event);
         } else {
-            LOG.debug("Validation event: " + event + " " + event.getMessage());
+            log.debug("Validation event: " + event + " " + event.getMessage());
         }
         return true;
     }

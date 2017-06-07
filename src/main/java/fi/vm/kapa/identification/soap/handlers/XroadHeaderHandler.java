@@ -22,9 +22,15 @@
  */
 package fi.vm.kapa.identification.soap.handlers;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.UUID;
+import eu.x_road.xsd.xroad.Client;
+import eu.x_road.xsd.xroad.ObjectFactory;
+import eu.x_road.xsd.xroad.Service;
+import fi.vm.kapa.identification.config.SpringPropertyNames;
+import fi.vm.kapa.identification.logging.Logger;
+import fi.vm.kapa.identification.rest.identification.RequestIdentificationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
@@ -38,75 +44,68 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import fi.vm.kapa.identification.config.SpringPropertyNames;
-import fi.vm.kapa.identification.logging.Logger;
-import fi.vm.kapa.identification.rest.identification.RequestIdentificationFilter;
-
-import eu.x_road.xsd.xroad.Client;
-import eu.x_road.xsd.xroad.ObjectFactory;
-import eu.x_road.xsd.xroad.Service;
+import java.util.Collections;
+import java.util.Set;
+import java.util.UUID;
 
 @Component
-public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext>, SpringPropertyNames {
+public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
-    private static Logger LOG = Logger.getLogger(XroadHeaderHandler.class, Logger.VTJ_CLIENT);
+    private static Logger log = Logger.getLogger(XroadHeaderHandler.class, Logger.VTJ_CLIENT);
 
     private ObjectFactory factory = new ObjectFactory();
 
     @Autowired
     private HttpServletRequest request;
-    
+
     public static final String ORIG_USERID_HEADER = "origUserId";
     public static final String ORIG_REQUEST_ID_HEADER = "origRequestId";
 
+    @Value(SpringPropertyNames.CLIENT_OBJECT_TYPE)
+    private String clientObjectType;
+
+    @Value(SpringPropertyNames.CLIENT_SDSB_INSTANCE)
+    private String clientSdsbInstance;
+
+    @Value(SpringPropertyNames.CLIENT_MEMBER_CLASS)
+    private String clientMemberClass;
+
+    @Value(SpringPropertyNames.CLIENT_MEMBER_CODE)
+    private String clientMemberCode;
+
+    @Value(SpringPropertyNames.CLIENT_SUBSYSTEM_CODE)
+    private String clientSubsystemCode;
+
+    @Value(SpringPropertyNames.SERVICE_OBJECT_TYPE)
+    private String serviceObjectType;
+
+    @Value(SpringPropertyNames.SERVICE_SDSB_INSTANCE)
+    private String serviceSdsbInstance;
+
+    @Value(SpringPropertyNames.SERVICE_MEMBER_CLASS)
+    private String serviceMemberClass;
+
+    @Value(SpringPropertyNames.SERVICE_MEMBER_CODE)
+    private String serviceMemberCode;
+
+    @Value(SpringPropertyNames.SERVICE_SUBSYSTEM_CODE)
+    private String serviceSubsystemCode;
+
+    @Value(SpringPropertyNames.SERVICE_SERVICE_CODE)
+    private String serviceServiceCode;
+
+    @Value(SpringPropertyNames.SERVICE_SERVICE_VERSION)
+    private String serviceServiceVersion;
+
+    @Value(SpringPropertyNames.XROAD_PROTOCOL_VERSION)
+    private String xroadProtocolVersion;
+
+    @Override
     public Set<QName> getHeaders() {
         return Collections.emptySet();
     }
-
-    @Value(CLIENT_OBJECT_TYPE)
-    private String clientObjectType;
-
-    @Value(CLIENT_SDSB_INSTANCE)
-    private String clientSdsbInstance;
-
-    @Value(CLIENT_MEMBER_CLASS)
-    private String clientMemberClass;
-
-    @Value(CLIENT_MEMBER_CODE)
-    private String clientMemberCode;
-
-    @Value(CLIENT_SUBSYSTEM_CODE)
-    private String clientSubsystemCode;
-
-    @Value(SERVICE_OBJECT_TYPE)
-    private String serviceObjectType;
-
-    @Value(SERVICE_SDSB_INSTANCE)
-    private String serviceSdsbInstance;
-
-    @Value(SERVICE_MEMBER_CLASS)
-    private String serviceMemberClass;
-
-    @Value(SERVICE_MEMBER_CODE)
-    private String serviceMemberCode;
-
-    @Value(SERVICE_SUBSYSTEM_CODE)
-    private String serviceSubsystemCode;
-
-    @Value(SERVICE_SERVICE_CODE)
-    private String serviceServiceCode;
-
-    @Value(SERVICE_SERVICE_VERSION)
-    private String serviceServiceVersion;
-
-    @Value(XROAD_PROTOCOL_VERSION)
-    private String xroadProtocolVersion;
-
+    
+    @Override
     public boolean handleMessage(SOAPMessageContext messageContext) {
         Boolean outboundProperty = (Boolean) messageContext
                 .get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -120,28 +119,28 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext>, Spri
                 if (header == null) {
                     header = soapEnv.addHeader();
                 }
-                
+
                 JAXBElement<String> idElement = factory.createId(UUID.randomUUID().toString());
                 SOAPHeaderElement idHeaderElement = header.addHeaderElement(idElement.getName());
-                idHeaderElement.addTextNode((String) idElement.getValue());
-                
+                idHeaderElement.addTextNode(idElement.getValue());
+
                 String origUserId = request.getHeader(RequestIdentificationFilter.XROAD_END_USER);
                 if (origUserId == null) {
                     origUserId = "e-identification-end-user-unknown";
                 }
-                
+
                 JAXBElement<String> userIdElement = factory.createUserId(origUserId);
                 SOAPHeaderElement uidHeaderElement = header.addHeaderElement(userIdElement.getName());
-                uidHeaderElement.addTextNode((String) userIdElement.getValue());
-                
+                uidHeaderElement.addTextNode(userIdElement.getValue());
+
                 String origRequestId = request.getHeader(RequestIdentificationFilter.XROAD_REQUEST_IDENTIFIER);
                 if (origRequestId == null) {
                     origRequestId = "";
                 }
-                
+
                 JAXBElement<String> issueElement = factory.createIssue(origRequestId);
                 SOAPHeaderElement issueHeaderElement = header.addHeaderElement(issueElement.getName());
-                issueHeaderElement.addTextNode((String) issueElement.getValue());
+                issueHeaderElement.addTextNode(issueElement.getValue());
 
                 Client client = factory.createClient();
                 JAXBElement<Client> clientElement = factory.createClient(client);
@@ -170,22 +169,24 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext>, Spri
 
                 JAXBElement<String> protocolVersionElement = factory.createProtocolVersion(this.xroadProtocolVersion);
                 SOAPHeaderElement protocolVersionHeaderElement = header.addHeaderElement(protocolVersionElement.getName());
-                protocolVersionHeaderElement.addTextNode((String) protocolVersionElement.getValue());
+                protocolVersionHeaderElement.addTextNode(protocolVersionElement.getValue());
 
                 soapMsg.saveChanges();
 
             } catch (Exception e) {
-                LOG.error("Xroad header handler exception occured " + e);
-                e.printStackTrace();
+                log.error("Xroad header handler exception occured " + e);
             }
         }
         return true;
     }
 
+    @Override
     public boolean handleFault(SOAPMessageContext messageContext) {
         return true;
     }
 
+    @Override
     public void close(MessageContext messageContext) {
+    	// Note to sonar, needed to implement interface
     }
 }

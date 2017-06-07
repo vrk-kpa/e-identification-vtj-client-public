@@ -22,15 +22,14 @@
  */
 package fi.vm.kapa.identification.config;
 
-import javax.annotation.PostConstruct;
-import javax.ws.rs.ApplicationPath;
-
+import fi.vm.kapa.identification.vtjclient.resources.VTJResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import fi.vm.kapa.identification.vtjclient.resources.VTJResource;
+import javax.annotation.PostConstruct;
+import javax.ws.rs.ApplicationPath;
 
 @Configuration
 @ApplicationPath("/")
@@ -41,13 +40,13 @@ public class ServiceConfiguration extends ResourceConfig {
 
     @Value("${xroad_connectivity_keystore_pw}")
     String xroadKeyStorePassword;
-    
+
     @Value("${xroad_truststore_path}")
     String xroadTruststorePath;
 
     @Value("${xroad_truststore_password}")
     String xroadTruststorePassword;
-    
+
     public ServiceConfiguration() {
         register(VTJResource.class);
     }

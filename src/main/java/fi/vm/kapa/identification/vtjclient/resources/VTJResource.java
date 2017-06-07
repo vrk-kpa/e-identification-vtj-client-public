@@ -22,29 +22,24 @@
  */
 package fi.vm.kapa.identification.vtjclient.resources;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import fi.vm.kapa.identification.logging.Logger;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 @Service
 @Path("/vtj")
 public class VTJResource {
-	
-	private static Logger LOG = Logger.getLogger(VTJResource.class, Logger.VTJ_CLIENT);
+
+    private static Logger log = Logger.getLogger(VTJResource.class, Logger.VTJ_CLIENT);
 
     private VTJService service;
 
@@ -58,17 +53,18 @@ public class VTJResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/person")
     public Response getPerson(
-    		@FormParam(value = "identifier") String identifier,
-    		@FormParam(value = "identifierType") Identifier.Types identifierType,
-    		@FormParam(value = "issuerDn") String issuerDn) {
+            @FormParam(value = "identifier") String identifier,
+            @FormParam(value = "identifierType") Identifier.Types identifierType,
+            @FormParam(value = "issuerDn") String issuerDn) {
         try {
             VTJResponse vtjResponse = service.getVTJResponse(identifier, identifierType, issuerDn);
-            if ( vtjResponse.isSuccess() && vtjResponse.getError() == null ) {
+            if (vtjResponse.isSuccess() && vtjResponse.getError() == null) {
                 return Response.ok().entity(vtjResponse).build();
             } else {
                 return Response.serverError().entity(vtjResponse).build();
             }
-        } catch (Exception e) { 
+        } catch (Exception e) {
+        	log.warning(e.getMessage(), e);
             ResponseBuilder responseBuilder = Response.serverError();
             return responseBuilder.build();
         }

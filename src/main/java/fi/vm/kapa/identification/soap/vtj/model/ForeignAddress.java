@@ -1,11 +1,11 @@
 package fi.vm.kapa.identification.soap.vtj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement(name = "VakinainenUlkomainenLahiosoite")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,30 +14,46 @@ public class ForeignAddress {
     @JsonIgnore
     @XmlElement(name = "UlkomainenLahiosoite")
     private StringNode foreignStreetAddress;
-    
+
     @JsonIgnore
     @XmlElement(name = "UlkomainenPaikkakuntaJaValtioS")
     private StringNode foreignLocalityAndStateS;
-  
+
     @JsonIgnore
     @XmlElement(name = "UlkomainenPaikkakuntaJaValtioR")
     private StringNode foreignLocalityAndStateR;
-  
+
     @JsonIgnore
     @XmlElement(name = "UlkomainenPaikkakuntaJaValtioSelvakielinen")
     private StringNode foreignLocalityAndStateClearText;
-  
+
     @JsonIgnore
     @XmlElement(name = "Valtiokoodi3")
     private StringNode stateCode;
-    
+
     @JsonIgnore
     @XmlElement(name = "AsuminenAlkupvm")
     private StringNode recidencyStartDate;
-    
+
     @JsonIgnore
     @XmlElement(name = "AsuminenLoppupvm")
     private StringNode recidencyEndDate;
+
+    public ForeignAddress() {
+    	// UncommentedEmptyConstructor required by javax.xml
+    }
+
+    public ForeignAddress(StringNode foreignStreetAddress, StringNode foreignLocalityAndStateS,
+                          StringNode foreignLocalityAndStateR, StringNode foreignLocalityAndStateClearText, StringNode stateCode,
+                          StringNode recidencyStartDate, StringNode recidencyEndDate) {
+        this.foreignStreetAddress = foreignStreetAddress;
+        this.foreignLocalityAndStateS = foreignLocalityAndStateS;
+        this.foreignLocalityAndStateR = foreignLocalityAndStateR;
+        this.foreignLocalityAndStateClearText = foreignLocalityAndStateClearText;
+        this.stateCode = stateCode;
+        this.recidencyStartDate = recidencyStartDate;
+        this.recidencyEndDate = recidencyEndDate;
+    }
 
     public StringNode getForeignStreetAddress() {
         return foreignStreetAddress;
@@ -95,7 +111,6 @@ public class ForeignAddress {
     public void setRecidencyEndDate(StringNode recidencyEndDate) {
         this.recidencyEndDate = recidencyEndDate;
     }
-    
-    
+
 
 }

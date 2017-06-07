@@ -30,7 +30,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @PropertySources(value = {
-    @PropertySource(value = "file:/opt/vtj-client-properties/vtj-client.properties", ignoreResourceNotFound = true)})
+        @PropertySource(value = "file:/opt/vtj-client-properties/vtj-client.properties", ignoreResourceNotFound = true)
+})
 public class AppConfiguration {
 
     @Bean

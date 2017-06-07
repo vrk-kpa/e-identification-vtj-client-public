@@ -22,33 +22,51 @@
  */
 package fi.vm.kapa.identification.soap.vtj.model;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "SahkoinenAsiointitunnus")
+@XmlRootElement(name = "Asiakasinfo")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ElectronicIdentifier {
+public class CustomerInfo {
 
-    @XmlValue
-    private String electronicIdentifier;
+    @XmlElement(name = "InfoS")
+    private StringNode infoS;
 
-    @XmlAttribute(name = "voimassaolokoodi")
-    private String validityCode;
+    @XmlElement(name = "InfoR")
+    private StringNode infoR;
 
+    @XmlElement(name = "InfoE")
+    private StringNode infoE;
 
-    public String getElectronicIdentifier() {
-        return electronicIdentifier;
+    public StringNode getInfoS() {
+        return infoS;
     }
 
-    public void setElectronicIdentifier(String electronicIdentifier) {
-        this.electronicIdentifier = electronicIdentifier;
+    public void setInfoS(StringNode infoS) {
+        this.infoS = infoS;
     }
 
-    public String getValidityCode() {
-        return validityCode;
+    public StringNode getInfoR() {
+        return infoR;
     }
 
-    public void setValidityCode(String validityCode) {
-        this.validityCode = validityCode;
+    public void setInfoR(StringNode infoR) {
+        this.infoR = infoR;
+    }
+
+    public StringNode getInfoE() {
+        return infoE;
+    }
+
+    public void setInfoE(StringNode infoE) {
+        this.infoE = infoE;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerInfo [infoS=" + infoS + ", infoR=" + infoR + ", infoE=" + infoE + "]";
     }
 
 }

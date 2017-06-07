@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+    ">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="fi.vm.kapa.identification"/>
+    <context:property-placeholder properties-ref="defaultProps"/>
+
+    <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <util:properties local-override="true">
+                <prop key="vtj_username">foobar1</prop>
+                <prop key="vtj_password">REMOTE_USER</prop>
+                <prop key="vtj_sosonimi">REMOTE_USER</prop>
+                <prop key="vtj_ca">REMOTE_USER</prop>
+                <prop key="vtj_ca_validity">REMOTE_USER</prop>
+                <prop key="vtj_ca_blacklisted">REMOTE_USER</prop>
+                <prop key="service_sdsb_instance">REMOTE_USER</prop>
+                <prop key="service_member_class">REMOTE_USER</prop>
+                <prop key="service_member_code">REMOTE_USER</prop>
+                <prop key="service_subsystem_code">REMOTE_USER</prop>
+                <prop key="service_service_code">REMOTE_USER</prop>
+                <prop key="service_service_version">REMOTE_USER</prop>
+                <prop key="service_object_type">REMOTE_USER</prop>
+                <prop key="client_object_type">REMOTE_USER</prop>
+                <prop key="client_sdsb_instance">REMOTE_USER</prop>
+                <prop key="client_member_class">REMOTE_USER</prop>
+                <prop key="client_member_code">REMOTE_USER</prop>
+                <prop key="client_subsystem_code">REMOTE_USER</prop>
+                <prop key="xroad_endpoint">http://localhost:8041</prop>
+                <prop key="xroad_connectivity_keystore_path">REMOTE_USER</prop>
+                <prop key="xroad_connectivity_keystore_pw">REMOTE_USER</prop>
+                <prop key="xroad_truststore_path">REMOTE_USER</prop>
+                <prop key="xroad_protocol_version">REMOTE_USER</prop>
+                <prop key="vtj_connection_timeout">REMOTE_USER</prop>
+                <prop key="vtj_receive_timeout">REMOTE_USER</prop>
+                <prop key="xroad_truststore_password">REMOTE_USER</prop>
+            </util:properties>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.mock.web.MockHttpServletRequest" name="httpRequest" lazy-init="false"/>
+
+</beans>

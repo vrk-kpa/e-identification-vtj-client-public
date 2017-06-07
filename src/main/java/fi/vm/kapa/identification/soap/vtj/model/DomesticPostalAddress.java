@@ -1,40 +1,40 @@
 package fi.vm.kapa.identification.soap.vtj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @XmlRootElement(name = "KotimainenPostiosoite")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DomesticPostalAddress {
-    
+
     @JsonIgnore
     @XmlElement(name = "PostiosoiteS")
     private StringNode addressS;
-    
+
     @JsonIgnore
     @XmlElement(name = "PostiosoiteR")
     private StringNode addressR;
-    
+
     @JsonIgnore
     @XmlElement(name = "Postinumero")
     private StringNode postalCode;
-    
+
     @JsonIgnore
     @XmlElement(name = "PostitoimipaikkaS")
     private StringNode cityS;
-    
+
     @JsonIgnore
     @XmlElement(name = "PostitoimipaikkaR")
     private StringNode cityR;
-    
+
     @JsonIgnore
     @XmlElement(name = "PostiosoiteAlkupvm")
     private StringNode recidencyStartDate;
-    
+
     @JsonIgnore
     @XmlElement(name = "PostiosoiteLoppupvm")
     private StringNode recidencyEndDate;

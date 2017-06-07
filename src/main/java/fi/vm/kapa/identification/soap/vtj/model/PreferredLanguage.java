@@ -1,11 +1,11 @@
 package fi.vm.kapa.identification.soap.vtj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement(name = "Asiointikieli")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,7 +14,7 @@ public class PreferredLanguage {
     @JsonIgnore
     @XmlElement(name = "Kielikoodi")
     private StringNode languageCode;
-        
+
     @JsonIgnore
     @XmlElement(name = "KieliS")
     private StringNode languageS;

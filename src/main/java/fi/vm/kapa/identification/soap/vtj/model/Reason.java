@@ -22,28 +22,26 @@
  */
 package fi.vm.kapa.identification.soap.vtj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement(name = "Hakuperusteet")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Reason {
-    
-    @JsonIgnore 
-    @XmlElement(name = "Henkilotunnus")    
-    private String hetu;    
-    
+
+    @JsonIgnore
+    @XmlElement(name = "Henkilotunnus")
+    private String hetu;
+
     @JsonIgnore
     @XmlElement(name = "SahkoinenAsiointitunnus")
     private ElectronicIdentifierRequest satu;
 
-    
+
     public ElectronicIdentifierRequest getSatu() {
         return satu;
     }
@@ -52,5 +50,5 @@ public class Reason {
         this.satu = satu;
     }
 
-   
+
 }

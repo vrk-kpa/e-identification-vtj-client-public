@@ -22,31 +22,27 @@
  */
 package fi.vm.kapa.identification.soap.vtj.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement(name = "SahkoinenAsiointitunnus")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ElectronicIdentifierRequest {
-    
+
     @XmlValue
     private String electronicIdentifier;
 
     @XmlAttribute(name = "hakuperustePaluukoodi")
     private String returnCode;
-    
+
     @XmlAttribute(name = "hakuperusteTekstiE")
     private String returnTextE;
 
     @XmlAttribute(name = "hakuperusteTekstiR")
     private String returnTextR;
-    
+
     @XmlAttribute(name = "hakuperusteTekstiS")
     private String returnTextS;
-    
+
     public String getElectronicIdentifier() {
         return electronicIdentifier;
     }
@@ -87,5 +83,5 @@ public class ElectronicIdentifierRequest {
         this.returnTextS = returnTextS;
     }
 
-        
+
 }

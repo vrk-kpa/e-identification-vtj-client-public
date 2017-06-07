@@ -34,6 +34,14 @@ public class CurrentFirstNames {
     @XmlElement(name = "Etunimet")
     private StringNode firstName;
 
+    public CurrentFirstNames() {
+    	// UncommentedEmptyConstructor required by javax.xml
+    }
+
+    public CurrentFirstNames(StringNode firstName) {
+        setFirstName(firstName);
+    }
+
     public StringNode getFirstName() {
         return firstName;
     }

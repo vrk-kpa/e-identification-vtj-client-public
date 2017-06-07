@@ -20,35 +20,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vm.kapa.identification.soap.vtj.model;
 
-import javax.xml.bind.annotation.*;
+package fi.vm.kapa.identification.soap.vtj;
 
-@XmlRootElement(name = "SahkoinenAsiointitunnus")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ElectronicIdentifier {
+public class SoapFaultCodeException extends Exception {
+    private static final long serialVersionUID = 1L;
 
-    @XmlValue
-    private String electronicIdentifier;
+    private final String faultCode;
 
-    @XmlAttribute(name = "voimassaolokoodi")
-    private String validityCode;
-
-
-    public String getElectronicIdentifier() {
-        return electronicIdentifier;
+    public SoapFaultCodeException(String faultCode) {
+        super();
+        this.faultCode = faultCode;
     }
 
-    public void setElectronicIdentifier(String electronicIdentifier) {
-        this.electronicIdentifier = electronicIdentifier;
+    public String getFaultCode() {
+        return faultCode;
     }
 
-    public String getValidityCode() {
-        return validityCode;
+    @Override
+    public String toString() {
+        return "SoapFaultCodeException [faultCode=" + faultCode + "]";
     }
 
-    public void setValidityCode(String validityCode) {
-        this.validityCode = validityCode;
+    @Override
+    public String getMessage() {
+        return this.toString();
     }
 
 }

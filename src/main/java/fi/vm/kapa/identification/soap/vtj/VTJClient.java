@@ -22,20 +22,6 @@
  */
 package fi.vm.kapa.identification.soap.vtj;
 
-import java.util.List;
-import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.ws.Holder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.w3c.dom.Node;
-
-import fi.vm.kapa.identification.config.SpringPropertyNames;
 import fi.vm.kapa.identification.logging.Logger;
 import fi.vm.kapa.identification.soap.vtj.model.VTJResponseMessage;
 import fi.vm.kapa.identification.type.Identifier;
@@ -43,62 +29,64 @@ import fi.vrk.xml.ws.vtj.vtjkysely._1.HenkiloTunnusKyselyReqBodyTiedot;
 import fi.vrk.xml.ws.vtj.vtjkysely._1.HenkiloTunnusKyselyResType;
 import fi.vrk.xml.ws.vtj.vtjkysely._1.ISoSoAdapterService60;
 import fi.vrk.xml.ws.vtj.vtjkysely._1.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Named;
+import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
+import javax.xml.ws.Holder;
 
 
 @Component
 @WebService(endpointInterface = "fi.vrk.xml.identification.vtj.ISoSoAdapterService60")
-public class VTJClient implements SpringPropertyNames {
+public class VTJClient {
+    private static Logger log = Logger.getLogger(VTJClient.class, Logger.VTJ_CLIENT);
 
-    ObjectFactory factory = new ObjectFactory();
-    
+    private final ObjectFactory factory;
+    private final ISoSoAdapterService60 iService;
+
+    private final String vtjUsername;
+    private final String vtjCAValidity;
+    private final String vtjCABlacklisted;
+    private final String vtjPassword;
+    private final String vtjSoSonimi;
+    private final VTJResponseMessageUnmarshaller vtjResponseMessageUnmarshaller;
+
     @Autowired
-    ISoSoAdapterService60 iService;
-
-    @Autowired
-    private HttpServletRequest request;
-
-    @Value(VTJ_USERNAME)
-    private String vtjUsername;
-    
-    @Value(VTJ_CA)
-    private String vtjCA;
-    
-    @Value(VTJ_CA_VALIDITY)
-    private String vtjCAValidity;
-    
-    @Value(VTJ_CA_BLACKLISTED)
-    private String vtjCABlacklisted;
-    
-    @Value(VTJ_PASSWORD)
-    private String vtjPassword;
-    
-    @Value(VTJ_SOSONIMI)
-    private String vtjSoSonimi;
-            
-    @Value(XROAD_ENDPOINT)
-    private String xrdEndPoint;
-    
-    @Value(XROAD_CONNECTIVITY_KEYSTORE_PATH)
-    String xrdEndPointKeystorePath;
-    
-    @Value(XROAD_CONNECTIVITY_KEYSTORE_PW)
-    String xrdEndPointKeystorePw;
-       
-   
-    private static Logger LOG = Logger.getLogger(VTJClient.class, Logger.VTJ_CLIENT);
+    public VTJClient(
+            ISoSoAdapterService60 iService,
+            @Named("vtjkyselyObjectFactory") ObjectFactory objectFactory,
+            VTJResponseMessageUnmarshaller vtjResponseMessageUnmarshaller,
+            @Value("${vtj_sosonimi}") String vtjSoSonimi,
+            @Value("${vtj_username}") String vtjUsername,
+            @Value("${vtj_password}") String vtjPassword,
+            @Value("${vtj_ca_validity}") String vtjCAValidity,
+            @Value("${vtj_ca_blacklisted}") String vtjCABlacklisted) {
+        this.iService = iService;
+        this.factory = objectFactory;
+        this.vtjResponseMessageUnmarshaller = vtjResponseMessageUnmarshaller;
+        this.vtjSoSonimi = vtjSoSonimi;
+        this.vtjUsername = vtjUsername;
+        this.vtjPassword = vtjPassword;
+        this.vtjCABlacklisted = vtjCABlacklisted;
+        this.vtjCAValidity = vtjCAValidity;
+    }
 
 
     public VTJResponseMessage getResponse(String identifier, Identifier.Types identifierType, String issuerDn) throws JAXBException {
-        LOG.debug("VTJClient.getResponse() starts");
-                    
+        log.debug("VTJClient.getResponse() starts");
+
         HenkiloTunnusKyselyReqBodyTiedot reqBodyTiedot = factory.createHenkiloTunnusKyselyReqBodyTiedot();
-        
-        if ( identifierType == Identifier.Types.HETU ) {
+
+        if (identifierType == Identifier.Types.HETU) {
             reqBodyTiedot.setHenkilotunnus(identifier);
-        } else if ( identifierType == Identifier.Types.SATU ) {
+        } else if (identifierType == Identifier.Types.SATU) {
             reqBodyTiedot.setSahkoinenAsiointitunnus(identifier);
             reqBodyTiedot.setHenkilotunnus("");
-        }            
+        }
+
         reqBodyTiedot.setKayttajatunnus(vtjUsername);
         reqBodyTiedot.setSalasana(vtjPassword);
         reqBodyTiedot.setSoSoNimi(vtjSoSonimi);
@@ -106,23 +94,18 @@ public class VTJClient implements SpringPropertyNames {
         reqBodyTiedot.setVarmenteenMyontaja(issuerDn);
         reqBodyTiedot.setVarmenteenVoimassaolotarkistus(vtjCAValidity);
         reqBodyTiedot.setVarmenteenSulkulistatarkistus(vtjCABlacklisted);
-               
-        Holder<HenkiloTunnusKyselyReqBodyTiedot> request = new Holder<HenkiloTunnusKyselyReqBodyTiedot>(reqBodyTiedot);
+
+        Holder<HenkiloTunnusKyselyReqBodyTiedot> request = new Holder<>(reqBodyTiedot);
 
         HenkiloTunnusKyselyResType resType = factory.createHenkiloTunnusKyselyResType();
-        Holder<HenkiloTunnusKyselyResType> response = new Holder<HenkiloTunnusKyselyResType>(resType);
+        Holder<HenkiloTunnusKyselyResType> response = new Holder<>(resType);
+
         iService.henkilonTunnusKysely(request, response);
+
         resType = response.value;
 
-        List<Object> list = resType.getAny();
-        for (Object o : list) {
-            JAXBContext context = JAXBContext
-                    .newInstance(VTJResponseMessage.class);
-            Unmarshaller um = context.createUnmarshaller();
-            um.setEventHandler(new CustomValidationEventHandler());
-            return (VTJResponseMessage) um.unmarshal((Node) o);
-        }
-        return null;
+        return vtjResponseMessageUnmarshaller.getVtjResponseMessage(resType);
     }
-    
+
+
 }

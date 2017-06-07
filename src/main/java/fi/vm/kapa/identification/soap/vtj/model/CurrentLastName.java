@@ -34,11 +34,19 @@ public class CurrentLastName {
     @XmlElement(name = "Sukunimi")
     private StringNode lastName;
 
+    public CurrentLastName() {
+    	// UncommentedEmptyConstructor required by javax.xml
+    }
+
+    public CurrentLastName(StringNode lastName) {
+        this.lastName = lastName;
+    }
+
     public StringNode getLastName() {
         return lastName;
     }
 
-    public void StringNode(StringNode lastName) {
+    public void setLastName(StringNode lastName) {
         this.lastName = lastName;
     }
 

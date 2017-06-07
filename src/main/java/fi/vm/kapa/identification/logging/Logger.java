@@ -22,14 +22,13 @@
  */
 package fi.vm.kapa.identification.logging;
 
-import java.util.Random;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Random;
 
 public class Logger {
 
@@ -41,7 +40,7 @@ public class Logger {
     public static final String REQUEST_ID = "ReqID";
     public static final String NO_REQUEST_ID = "no_request"; // will be shown as ReqID if logging outside request scope
     public static final String VTJ_CLIENT = "Vtj-client";
-    
+
 
     private Logger() {
     }
@@ -56,23 +55,33 @@ public class Logger {
     }
 
     public void debug(String msg) {
-        slf4jLogger.debug(createMessage(msg));
-
+    	if (slf4jLogger.isDebugEnabled()) {
+    		slf4jLogger.debug(createMessage(msg));
+    	}
     }
 
     public void info(String msg) {
-        slf4jLogger.info(createMessage(msg));
-
+    	if (slf4jLogger.isInfoEnabled()) {
+    		slf4jLogger.info(createMessage(msg));
+    	}
     }
 
     public void warning(String msg) {
-        slf4jLogger.warn(createMessage(msg));
+    	if (slf4jLogger.isWarnEnabled()) {
+    		slf4jLogger.warn(createMessage(msg));
+    	}
+    }
 
+    public void warning(String msg, Throwable t) {
+    	if (slf4jLogger.isWarnEnabled()) {
+    		slf4jLogger.warn(createMessage(msg), t);
+    	}
     }
 
     public void error(String msg) {
-        slf4jLogger.error(createMessage(msg));
-
+    	if (slf4jLogger.isErrorEnabled()) {
+    		slf4jLogger.error(createMessage(msg));
+    	}
     }
 
     private String createMessage(String msg) {

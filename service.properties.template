@@ -13,11 +13,9 @@ xroad_connectivity_keystore_path={{ xroad_connectivity_keystore_path }}
 xroad_connectivity_keystore_pw={{ xroad_connectivity_keystore_pw }}
 xroad_truststore_password={{ xroad_truststore_password }}
 xroad_truststore_path={{ xroad_truststore_path }}
-
 # VTJ connection properties
 vtj_connection_timeout={{ vtj_connection_timeout }}
 vtj_receive_timeout={{ vtj_receive_timeout }}
-
 #ssl-props
 server.port={{ vtj_server_port }}
 server.ssl.key-store={{ tomcat_keystore }}
@@ -25,7 +23,6 @@ server.ssl.key-store-password={{ tomcat_cert_storepass }}
 server.ssl.key-password={{ tomcat_cert_storepass }}
 server.ssl.keyStoreType=JKS
 server.ssl.keyAlias={{ tomcat_alias }}
-
 # SERVICE_OBJECT_TYPE (eg. SERVICE)
 service_object_type=SERVICE
 # CLIENT_OBJECT_TYPE (eg. SUBSYSTEM)
@@ -42,7 +39,6 @@ service_subsystem_code={{ service_subsystem_code }}
 service_service_code={{ service_service_code }}
 # SERVICE_VERSION defines the version of the called service (eg. v1)
 service_service_version={{ service_service_version }}
-
 # own xroad service specific properties
 # ROVA_SDSB_INSTANCE identifies X-road instance: contains ISO country code and code of technical env (eg. FI_DEV)
 client_sdsb_instance={{ client_sdsb_instance }}
@@ -52,7 +48,6 @@ client_member_class={{ client_member_class }}
 client_member_code={{ client_member_code }}
 # ROVA_SUBSYSTEM_CODE defines the name of the caller subsystem on X-road
 client_subsystem_code={{ client_subsystem_code }}
-
 # for performance & load testing without real VTJ
 vtjclient_dummydata={{vtj_dummydata | default('false')}}
 vtjclient_dummydata_defaultHetu={{vtj_dummydata_hetu | default('010191-9630')}}

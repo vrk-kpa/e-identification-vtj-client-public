@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DummyVTJService implements VTJService {
-    private static Logger LOG = Logger.getLogger(DummyVTJService.class, Logger.VTJ_CLIENT);
+    private static Logger log = Logger.getLogger(DummyVTJService.class, Logger.VTJ_CLIENT);
 
     public final PersonService personService;
     private final int vtjDelay;
@@ -51,13 +51,14 @@ public class DummyVTJService implements VTJService {
         try {
             Thread.sleep(vtjDelay);
         } catch (InterruptedException e) {
-            LOG.debug("sleep interrupted\n" + e);
+            log.debug("sleep interrupted\n" + e);
+            Thread.currentThread().interrupt();
         }
         VTJResponse response = new VTJResponse();
         response.setPerson(personService.getPerson(identifier, identifierType));
         response.setSuccess(true);
-        LOG.debug("returning person with HETU=" + response.getPerson().getHetu());
-        LOG.info("duration=" + (System.currentTimeMillis() - startTime));
+        log.debug("returning person with HETU=" + response.getPerson().getHetu());
+        log.info("duration=" + (System.currentTimeMillis() - startTime));
         return response;
     }
 }

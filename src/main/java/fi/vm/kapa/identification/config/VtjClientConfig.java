@@ -20,35 +20,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vm.kapa.identification.soap.vtj.model;
+package fi.vm.kapa.identification.config;
 
-import javax.xml.bind.annotation.*;
+import fi.vrk.xml.ws.vtj.vtjkysely._1.ObjectFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@XmlRootElement(name = "SahkoinenAsiointitunnus")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ElectronicIdentifier {
+@Configuration
+public class VtjClientConfig {
 
-    @XmlValue
-    private String electronicIdentifier;
-
-    @XmlAttribute(name = "voimassaolokoodi")
-    private String validityCode;
-
-
-    public String getElectronicIdentifier() {
-        return electronicIdentifier;
+    @Bean(name = "vtjkyselyObjectFactory")
+    ObjectFactory provideObjectFactory() {
+        return new ObjectFactory();
     }
-
-    public void setElectronicIdentifier(String electronicIdentifier) {
-        this.electronicIdentifier = electronicIdentifier;
-    }
-
-    public String getValidityCode() {
-        return validityCode;
-    }
-
-    public void setValidityCode(String validityCode) {
-        this.validityCode = validityCode;
-    }
-
 }

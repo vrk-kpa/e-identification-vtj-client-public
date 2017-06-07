@@ -22,36 +22,39 @@
  */
 package fi.vm.kapa.identification.config;
 
-public interface SpringPropertyNames {
+public class SpringPropertyNames {
 
-    String VTJ_USERNAME = "${vtj_username}"; // vtj-palvelun käyttäjätunnus
-    String VTJ_PASSWORD = "${vtj_password}"; // vtj-palvelun salasana
-    String VTJ_SOSONIMI = "${vtj_sosonimi}";
+    public static final String VTJ_USERNAME = "${vtj_username}"; // vtj-palvelun käyttäjätunnus
+    public static final String VTJ_PASSWORD = "${vtj_password}"; //NOSONAR vtj-palvelun salasana
+    public static final String VTJ_SOSONIMI = "${vtj_sosonimi}";
+
+    public static final String VTJ_CA = "${vtj_ca}";
+    public static final String VTJ_CA_VALIDITY = "${vtj_ca_validity}";
+    public static final String VTJ_CA_BLACKLISTED = "${vtj_ca_blacklisted}";
+
+    public static final String SERVICE_SDSB_INSTANCE = "${service_sdsb_instance}"; // xroad instanssin id (eg. FI_DEV)
+    public static final String SERVICE_MEMBER_CLASS = "${service_member_class}"; // xroadia kutsuvan organisaation tyyppi (eg. COM, ORG, GOV)
+    public static final String SERVICE_MEMBER_CODE = "${service_member_code}"; // xroadia kutsuvan organisaation id (eg. yt-tunnus)
+    public static final String SERVICE_SUBSYSTEM_CODE = "${service_subsystem_code}"; // xroadin kautta kutsuttavan alijärjestelmän nimi (eg. DemoService)
+    public static final String SERVICE_SERVICE_CODE = "${service_service_code}"; // xroadin kautta kutsuttavan palvelun nimi (eg. getRandom)
+    public static final String SERVICE_SERVICE_VERSION = "${service_service_version}";
+
+    public static final String SERVICE_OBJECT_TYPE = "${service_object_type}"; // xroad-kutsun palvelutyyppi 
+    public static final String CLIENT_OBJECT_TYPE = "${client_object_type}"; // xroad-kutsun objektityyppi	
+
+    public static final String CLIENT_SDSB_INSTANCE = "${client_sdsb_instance}";
+    public static final String CLIENT_MEMBER_CLASS = "${client_member_class}";
+    public static final String CLIENT_MEMBER_CODE = "${client_member_code}";
+    public static final String CLIENT_SUBSYSTEM_CODE = "${client_subsystem_code}";
+
+    public static final String XROAD_PROTOCOL_VERSION = "${xroad_protocol_version}";
+    public static final String XROAD_ENDPOINT = "${xroad_endpoint}"; // xroad-kutsun endpoint (oma liityntäpalvelin)
+    public static final String XROAD_CONNECTIVITY_KEYSTORE_PATH = "${xroad_connectivity_keystore_path}";
+    public static final String XROAD_CONNECTIVITY_KEYSTORE_PW = "${xroad_connectivity_keystore_pw}";
+
+    public static final String XROAD_TRUSTSTORE_PATH = "${xroad_truststore_path}";
+    public static final String XROAD_TRUSTSTORE_PASSWORD = "${xroad_truststore_password}"; //NOSONAR
     
-    String VTJ_CA = "${vtj_ca}";
-    String VTJ_CA_VALIDITY = "${vtj_ca_validity}";
-    String VTJ_CA_BLACKLISTED  = "${vtj_ca_blacklisted}";
-
-    String SERVICE_SDSB_INSTANCE = "${service_sdsb_instance}"; // xroad instanssin id (eg. FI_DEV)
-    String SERVICE_MEMBER_CLASS = "${service_member_class}"; // xroadia kutsuvan organisaation tyyppi (eg. COM, ORG, GOV)
-    String SERVICE_MEMBER_CODE = "${service_member_code}"; // xroadia kutsuvan organisaation id (eg. yt-tunnus)
-    String SERVICE_SUBSYSTEM_CODE = "${service_subsystem_code}"; // xroadin kautta kutsuttavan alijärjestelmän nimi (eg. DemoService)
-    String SERVICE_SERVICE_CODE = "${service_service_code}"; // xroadin kautta kutsuttavan palvelun nimi (eg. getRandom)
-    String SERVICE_SERVICE_VERSION = "${service_service_version}";
-
-    String SERVICE_OBJECT_TYPE = "${service_object_type}"; // xroad-kutsun palvelutyyppi 
-    String CLIENT_OBJECT_TYPE = "${client_object_type}"; // xroad-kutsun objektityyppi	
-
-    String CLIENT_SDSB_INSTANCE = "${client_sdsb_instance}";
-    String CLIENT_MEMBER_CLASS = "${client_member_class}";
-    String CLIENT_MEMBER_CODE = "${client_member_code}";
-    String CLIENT_SUBSYSTEM_CODE = "${client_subsystem_code}";
-
-    String XROAD_PROTOCOL_VERSION = "${xroad_protocol_version}";
-    String XROAD_ENDPOINT = "${xroad_endpoint}"; // xroad-kutsun endpoint (oma liityntäpalvelin)
-    String XROAD_CONNECTIVITY_KEYSTORE_PATH = "${xroad_connectivity_keystore_path}";
-    String XROAD_CONNECTIVITY_KEYSTORE_PW = "${xroad_connectivity_keystore_pw}";
-    
-    String XROAD_TRUSTSTORE_PATH = "${xroad_truststore_path}";
-    String XROAD_TRUSTSTORE_PASSWORD = "${xroad_truststore_password}";
+    private SpringPropertyNames() {
+	}
 }
