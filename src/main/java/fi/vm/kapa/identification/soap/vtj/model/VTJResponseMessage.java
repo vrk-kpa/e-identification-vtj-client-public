@@ -29,6 +29,9 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "VTJHenkiloVastaussanoma", namespace = "http://xml.vrk.fi/schema/vtjkysely")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VTJResponseMessage {
+	
+	@XmlTransient
+	public static final String FAULT_CODE_PERSON_NOT_FOUND = "0001";
 
     @XmlElement(name = "Henkilo")
     private SOAPPersonAdapter soapPerson;

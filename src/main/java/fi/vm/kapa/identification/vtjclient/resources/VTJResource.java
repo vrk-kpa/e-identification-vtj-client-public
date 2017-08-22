@@ -25,6 +25,7 @@ package fi.vm.kapa.identification.vtjclient.resources;
 import fi.vm.kapa.identification.logging.Logger;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
+import fi.vm.kapa.identification.vtjclient.service.VTJPersonNotExistException;
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 @Service
 @Path("/vtj")
@@ -63,10 +65,12 @@ public class VTJResource {
             } else {
                 return Response.serverError().entity(vtjResponse).build();
             }
+        } catch (VTJPersonNotExistException e) {
+        	log.info(e.getMessage(), e);
+        	return Response.status(Status.NOT_FOUND).build();
         } catch (Exception e) {
         	log.warning(e.getMessage(), e);
-            ResponseBuilder responseBuilder = Response.serverError();
-            return responseBuilder.build();
+            return Response.serverError().build();
         }
     }
 }

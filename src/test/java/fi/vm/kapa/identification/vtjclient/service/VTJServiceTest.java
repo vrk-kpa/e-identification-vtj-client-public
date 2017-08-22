@@ -6,6 +6,8 @@ import fi.vm.kapa.identification.soap.vtj.model.SOAPPersonAdapter;
 import fi.vm.kapa.identification.soap.vtj.model.VTJResponseMessage;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
+
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,7 +29,13 @@ public class VTJServiceTest {
         when(vtjMock.getResponse(any(), any(), any())).thenReturn(message);
         RealVTJService vtjService = new RealVTJService();
         vtjService.setClient(vtjMock);
-        VTJResponse response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
+        VTJResponse response = null;
+		try {
+			response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
+		} catch (VTJPersonNotExistException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
         assertEquals(message.getSoapPerson().getPerson(), response.getPerson());
         assertEquals("121212-9999", response.getPerson().getHetu());
     }
@@ -42,7 +50,13 @@ public class VTJServiceTest {
         when(vtjMock.getResponse(any(), any(), any())).thenReturn(message);
         RealVTJService vtjService = new RealVTJService();
         vtjService.setClient(vtjMock);
-        VTJResponse response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
+        VTJResponse response = null;
+		try {
+			response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
+		} catch (VTJPersonNotExistException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
         assertFalse(response.isSuccess());
         assertEquals("vtj.haku.epaonnistui", response.getError());
     }
@@ -56,8 +70,14 @@ public class VTJServiceTest {
         when(vtjMock.getResponse(any(), any(), any())).thenReturn(message);
         RealVTJService vtjService = new RealVTJService();
         vtjService.setClient(vtjMock);
-        VTJResponse response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
-        assertFalse(response.isSuccess());
+        VTJResponse response = null;
+        boolean notExistThrown = false;
+		try {
+			response = vtjService.getVTJResponse("identifier", Identifier.Types.HETU, "issuerDn");
+		} catch (VTJPersonNotExistException e) {
+			notExistThrown = true;
+		}
+        Assert.assertTrue(notExistThrown);
     }
 
     private VTJResponseMessage getMessage(String hetuString, String validityCode) {

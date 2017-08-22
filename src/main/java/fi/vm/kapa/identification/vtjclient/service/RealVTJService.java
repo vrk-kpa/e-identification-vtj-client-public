@@ -28,6 +28,9 @@ import fi.vm.kapa.identification.soap.vtj.model.SOAPPersonAdapter;
 import fi.vm.kapa.identification.soap.vtj.model.VTJResponseMessage;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
+
+import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,33 +43,47 @@ public class RealVTJService implements VTJService {
     private VTJClient client;
 
     @Override
-    public VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn) {
+    public VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn) throws VTJPersonNotExistException {
         SOAPPersonAdapter soapPerson = null;
         VTJResponse vtjResponse = new VTJResponse();
 
+        long startTime = System.currentTimeMillis();
+        
+        VTJResponseMessage response = null;
+        
         try {
-            long startTime = System.currentTimeMillis();
-
-            VTJResponseMessage response = client.getResponse(identifier, identifierType, issuerDn);
-
-            log.info("duration=" + (System.currentTimeMillis() - startTime));
-
-            if (response == null || response.getSoapPerson() == null || response.getSoapPerson().getPerson().getHetu() == null) {
-                throw new VTJPersonNotExistException("Requested person not received from VTJ.");
-            }
-
-            try {
-                soapPerson = response.getSoapPerson();
-                vtjResponse.setPerson(soapPerson.getPerson());
-                vtjResponse.setSuccess(true);
-            } catch (Exception e) {
-                log.warning("Person parsing failed reason:" + e.getMessage(), e);
-                vtjResponse.setError("vtj.parsinta.epaonnistui");
-            }
-
+			response = client.getResponse(identifier, identifierType, issuerDn);
+		} catch (JAXBException e) {
+			log.warning("VTJ request failed:" + e.getMessage());
+			vtjResponse.setError("vtj.haku.epaonnistui");
+			return vtjResponse;
+		}
+        
+        log.info("duration=" + (System.currentTimeMillis() - startTime));
+        
+        if (response == null) {
+        	log.warning("VTJ request failed");
+			vtjResponse.setError("vtj.haku.epaonnistui");
+			return vtjResponse;
+        }
+        
+        if (VTJResponseMessage.FAULT_CODE_PERSON_NOT_FOUND.equals(response.getFaultCode())) {
+        	throw new VTJPersonNotExistException("Requested person does not exist in VTJ");
+        }
+        
+        if (response.getSoapPerson() == null || response.getSoapPerson().getPerson().getHetu() == null) {
+        	log.warning("VTJ request failed");
+			vtjResponse.setError("vtj.haku.epaonnistui");
+			return vtjResponse;
+        }
+        
+        try {
+        	soapPerson = response.getSoapPerson();
+        	vtjResponse.setPerson(soapPerson.getPerson());
+        	vtjResponse.setSuccess(true);
         } catch (Exception e) {
-            log.warning("VTJ request failed:" + e.getMessage(), e);
-            vtjResponse.setError("vtj.haku.epaonnistui");
+        	log.warning("Person parsing failed reason:" + e.getMessage(), e);
+        	vtjResponse.setError("vtj.parsinta.epaonnistui");
         }
 
         return vtjResponse;

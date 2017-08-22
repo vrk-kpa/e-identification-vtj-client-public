@@ -65,6 +65,12 @@ public class Logger {
     		slf4jLogger.info(createMessage(msg));
     	}
     }
+    
+    public void info(String msg, Throwable t) {
+    	if (slf4jLogger.isInfoEnabled()) {
+    		slf4jLogger.info(createMessage(msg), t);
+    	}
+    }
 
     public void warning(String msg) {
     	if (slf4jLogger.isWarnEnabled()) {

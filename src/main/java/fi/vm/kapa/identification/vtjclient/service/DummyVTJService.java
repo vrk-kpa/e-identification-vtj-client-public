@@ -46,7 +46,7 @@ public class DummyVTJService implements VTJService {
     }
 
     @Override
-    public VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn) {
+    public VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn) throws VTJPersonNotExistException {
         long startTime = System.currentTimeMillis();
         try {
             Thread.sleep(vtjDelay);

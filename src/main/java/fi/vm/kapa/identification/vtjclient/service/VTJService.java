@@ -26,5 +26,5 @@ import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
 
 public interface VTJService {
-    VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn);
+    VTJResponse getVTJResponse(String identifier, Identifier.Types identifierType, String issuerDn) throws VTJPersonNotExistException;
 }
