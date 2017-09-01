@@ -66,7 +66,7 @@ public class VTJResource {
                 return Response.serverError().entity(vtjResponse).build();
             }
         } catch (VTJPersonNotExistException e) {
-        	log.info(e.getMessage(), e);
+        	log.info(e.getMessage());
         	return Response.status(Status.NOT_FOUND).build();
         } catch (Exception e) {
         	log.warning(e.getMessage(), e);
