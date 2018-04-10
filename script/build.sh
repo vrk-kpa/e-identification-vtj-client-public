@@ -68,6 +68,8 @@ if [ "$nodeps" = "1" ]; then
 else
         mvn clean install project-info-reports:dependencies -Ddependency.locations.enabled=false docker:build -Ddocker.image.tag=:${TARGET_ENV}
 fi
+
+docker pull dev-docker-registry.kapa.ware.fi/e-identification-base-java-service
 IMAGE_NAME=dev-docker-registry.kapa.ware.fi/${PROJECTNAME}:${TARGET_ENV}
 
 # Add labels to image, jenkins build tag, git commit, git branch, package list and jar list currently
