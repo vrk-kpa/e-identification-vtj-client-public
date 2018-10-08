@@ -63,14 +63,15 @@ done
 if [ "$nodeps" = "1" ]; then
         mvn clean install
         mkdir -p target/site
-	touch target/site/.empty
-	mvn  docker:build -Ddocker.image.tag=:${TARGET_ENV}
 else
-        mvn clean install project-info-reports:dependencies -Ddependency.locations.enabled=false docker:build -Ddocker.image.tag=:${TARGET_ENV}
+        mvn clean install project-info-reports:dependencies -Ddependency.locations.enabled=false
 fi
 
-docker pull dev-docker-registry.kapa.ware.fi/e-identification-base-java-service
-IMAGE_NAME=dev-docker-registry.kapa.ware.fi/${PROJECTNAME}:${TARGET_ENV}
+docker pull e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/e-identification-base-java-service
+IMAGE_NAME=e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/${PROJECTNAME}:${TARGET_ENV}
+
+#build, tag and push docker image
+docker build -f Dockerfile -t ${IMAGE_NAME} .
 
 # Add labels to image, jenkins build tag, git commit, git branch, package list and jar list currently
 DPKG_RESULT=$(docker run --rm --entrypoint="/usr/bin/dpkg-query" ${IMAGE_NAME} -W|sed -e 's/$/|/' -e 's/$/\\/')
