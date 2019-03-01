@@ -32,6 +32,8 @@ public class SpringPropertyNames {
     public static final String VTJ_CA_VALIDITY = "${vtj_ca_validity}";
     public static final String VTJ_CA_BLACKLISTED = "${vtj_ca_blacklisted}";
 
+    public static final String VTJ_CLIENT_ID = "${vtj_client_id}";
+
     public static final String SERVICE_SDSB_INSTANCE = "${service_sdsb_instance}"; // xroad instanssin id (eg. FI_DEV)
     public static final String SERVICE_MEMBER_CLASS = "${service_member_class}"; // xroadia kutsuvan organisaation tyyppi (eg. COM, ORG, GOV)
     public static final String SERVICE_MEMBER_CODE = "${service_member_code}"; // xroadia kutsuvan organisaation id (eg. yt-tunnus)

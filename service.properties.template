@@ -23,6 +23,8 @@ server.ssl.key-store-password={{ tomcat_cert_storepass }}
 server.ssl.key-password={{ tomcat_cert_storepass }}
 server.ssl.keyStoreType=JKS
 server.ssl.keyAlias={{ tomcat_alias }}
+# vtj client id
+vtj_client_id={{ vtj_client_id }}
 # SERVICE_OBJECT_TYPE (eg. SERVICE)
 service_object_type=SERVICE
 # CLIENT_OBJECT_TYPE (eg. SUBSYSTEM)
@@ -51,5 +53,8 @@ client_subsystem_code={{ client_subsystem_code }}
 # for performance & load testing without real VTJ
 vtjclient_dummydata={{vtj_dummydata | default('false')}}
 vtjclient_dummydata_defaultHetu={{vtj_dummydata_hetu | default('010191-9630')}}
-vtjclient_dummydata_sleep={{vtj_dummydata_sleep | default('2000')}}
+vtjclient_dummydata_sleep={{vtj_dummydata_sleep | default('700')}}
+vtjclient_dummydata_sleep_deviation={{vtj_dummydata_sleep_deviation | default('100')}}
+vtjclient_dummydata_error_pct={{vtj_dummydata_error_pct | default('3')}}
+vtjclient_dummydata_error_sleep={{vtj_dummydata_error_sleep | default('0')}}
 

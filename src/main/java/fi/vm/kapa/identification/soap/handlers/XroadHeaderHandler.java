@@ -28,6 +28,7 @@ import eu.x_road.xsd.xroad.Service;
 import fi.vm.kapa.identification.config.SpringPropertyNames;
 import fi.vm.kapa.identification.logging.Logger;
 import fi.vm.kapa.identification.rest.identification.RequestIdentificationFilter;
+import fi.vm.kapa.identification.vtj.model.VtjIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -100,6 +101,9 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     @Value(SpringPropertyNames.XROAD_PROTOCOL_VERSION)
     private String xroadProtocolVersion;
 
+    @Value(SpringPropertyNames.VTJ_CLIENT_ID)
+    private String vtjClientId;
+
     @Override
     public Set<QName> getHeaders() {
         return Collections.emptySet();
@@ -133,12 +137,11 @@ public class XroadHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 SOAPHeaderElement uidHeaderElement = header.addHeaderElement(userIdElement.getName());
                 uidHeaderElement.addTextNode(userIdElement.getValue());
 
-                String origRequestId = request.getHeader(RequestIdentificationFilter.XROAD_REQUEST_IDENTIFIER);
-                if (origRequestId == null) {
-                    origRequestId = "";
-                }
+                String origRequestId = request.getHeader(VtjIssue.REQUEST_IDENTIFIER_HEADER);
+                VtjIssue vtjIssue = new VtjIssue(origRequestId);
+                vtjIssue.setVtjClientId(vtjClientId);
 
-                JAXBElement<String> issueElement = factory.createIssue(origRequestId);
+                JAXBElement<String> issueElement = factory.createIssue(vtjIssue.toString());
                 SOAPHeaderElement issueHeaderElement = header.addHeaderElement(issueElement.getName());
                 issueHeaderElement.addTextNode(issueElement.getValue());
 

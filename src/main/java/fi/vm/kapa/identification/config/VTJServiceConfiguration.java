@@ -23,6 +23,7 @@
 package fi.vm.kapa.identification.config;
 
 import fi.vm.kapa.identification.test.DummyPersonService;
+import fi.vm.kapa.identification.util.DummyDataDeviator;
 import fi.vm.kapa.identification.vtjclient.service.DummyVTJService;
 import fi.vm.kapa.identification.vtjclient.service.RealVTJService;
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
@@ -45,19 +46,32 @@ public class VTJServiceConfiguration {
     @Value("${vtjclient_dummydata_sleep:0}")
     private int vtjDummydataSleep;
 
+    @Value("${vtjclient_dummydata_sleep_deviation:0}")
+    private int vtjDummydataSleepDeviation;
+
+    @Value("${vtjclient_dummydata_error_pct:0}")
+    private int vtjDummydataErrorPercent;
+    
+    @Value("${vtjclient_dummydata_error_sleep:0}")
+    private int vtjDummydataErrorSleep;
+
     @Bean(name = "vtjService")
     VTJService provideVTJService() {
         if (vtjDummydataToBeUsed) {
             DummyPersonService dummyPersonService = new DummyPersonService(dummyDataDefaultHetu);
             dummyPersonService.setAdditionalStateInfo(getAdditionalStateInfo());
-            return new DummyVTJService(dummyPersonService, vtjDummydataSleep);
+            DummyDataDeviator dummyDataDeviator = new DummyDataDeviator(vtjDummydataSleep, vtjDummydataSleepDeviation, vtjDummydataErrorPercent, vtjDummydataErrorSleep);
+            return new DummyVTJService(dummyPersonService, dummyDataDeviator);
         } else {
             return new RealVTJService();
         }
     }
 
     private String getAdditionalStateInfo() {
-        return "instance=" + INSTANCE_HINT + ";delay=" + vtjDummydataSleep;
+        return "instance=" + INSTANCE_HINT +
+                ";delay=" + vtjDummydataSleep +
+                ";deviation=" + vtjDummydataSleepDeviation +
+                ";errorpercent=" + vtjDummydataErrorPercent;
     }
 
 }

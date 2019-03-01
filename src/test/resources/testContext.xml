@@ -43,6 +43,7 @@
                 <prop key="vtj_connection_timeout">REMOTE_USER</prop>
                 <prop key="vtj_receive_timeout">REMOTE_USER</prop>
                 <prop key="xroad_truststore_password">REMOTE_USER</prop>
+                <prop key="vtj_client_id">vtj-client-id</prop>
             </util:properties>
         </property>
     </bean>

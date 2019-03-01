@@ -20,36 +20,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vm.kapa.identification.vtjclient.service;
+package fi.vm.kapa.identification.util;
 
 import fi.vm.kapa.identification.test.DummyPersonService;
-import fi.vm.kapa.identification.util.DummyDataDeviator;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
-import org.junit.Before;
+import fi.vm.kapa.identification.vtjclient.service.DummyVTJService;
 import org.junit.Test;
 
 import static fi.vm.kapa.identification.type.Identifier.Types.HETU;
-import static fi.vm.kapa.identification.type.Identifier.Types.SATU;
 import static org.junit.Assert.assertEquals;
 
-public class DummyVTJServiceTest {
-    private DummyVTJService service;
-
-    @Before
-    public void setUp() throws Exception {
-        service = new DummyVTJService(new DummyPersonService("010191-9630"), new DummyDataDeviator(0, 0, 0, 0));
-    }
+public class DummyDataDeviatorTest {
 
     @Test
-    public void getVTJResponseReturnsPersonWithGivenHetu() throws Exception {
+    public void testDummyVtjServiceReturnsErrorWhenErrorPercent100() throws Exception {
+        DummyDataDeviator deviator = new DummyDataDeviator(600 ,200, 100, 0);
+        DummyVTJService service = new DummyVTJService(new DummyPersonService("010191-9630"), deviator);
         VTJResponse response = service.getVTJResponse("010191-9663", HETU, null);
-        assertEquals("010191-9663", response.getPerson().getHetu());
+
+        assertEquals(DummyDataDeviator.errorMsg, response.getError());
     }
 
     @Test
-    public void getVTJResponseReturnsPersonWithGivenSatu() throws Exception {
-        VTJResponse response = service.getVTJResponse("999196993", SATU, null);
-        assertEquals("010191-9630", response.getPerson().getHetu());
+    public void testDummyDataErrorCountMatchesErrorPercent() throws Exception {
+        for ( int i = 0; i < 100; i++ ) {
+            assertEquals(i, getDummyDataRealErrorPercent(i));
+        }
+    }
+
+    private int getDummyDataRealErrorPercent(int initialPercent) {
+        DummyDataDeviator deviator = new DummyDataDeviator(0, 0, initialPercent, 0);
+
+        int errorCount = 0;
+        int size = deviator.delays.length;
+        for (int i = 0; i < size; i++) {
+            double delay = deviator.delays[i];
+            if ( delay < 0 ) {
+                errorCount++;
+            }
+        }
+
+        return errorCount*100/size;
     }
 
 }
