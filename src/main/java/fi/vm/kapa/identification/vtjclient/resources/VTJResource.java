@@ -25,8 +25,10 @@ package fi.vm.kapa.identification.vtjclient.resources;
 import fi.vm.kapa.identification.logging.Logger;
 import fi.vm.kapa.identification.type.Identifier;
 import fi.vm.kapa.identification.vtj.model.VTJResponse;
+import fi.vm.kapa.identification.vtj.model.VtjIssue;
 import fi.vm.kapa.identification.vtjclient.service.VTJPersonNotExistException;
 import fi.vm.kapa.identification.vtjclient.service.VTJService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,22 +56,36 @@ public class VTJResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/person")
     public Response getPerson(
+            @HeaderParam(VtjIssue.REQUEST_IDENTIFIER_HEADER) String vtjIssue,
             @FormParam(value = "identifier") String identifier,
             @FormParam(value = "identifierType") Identifier.Types identifierType,
             @FormParam(value = "issuerDn") String issuerDn) {
         try {
             VTJResponse vtjResponse = service.getVTJResponse(identifier, identifierType, issuerDn);
             if (vtjResponse.isSuccess() && vtjResponse.getError() == null) {
-                return Response.ok().entity(vtjResponse).build();
+                Response.ResponseBuilder responseBuilder = Response.ok().entity(vtjResponse);
+                if ( StringUtils.isNotBlank(vtjIssue) ) {
+                    // send vtjIssue back as header so that response can be validated
+                    responseBuilder.header(VtjIssue.REQUEST_IDENTIFIER_HEADER, vtjIssue);
+                }
+                return responseBuilder.build();
             } else {
                 return Response.serverError().entity(vtjResponse).build();
             }
         } catch (VTJPersonNotExistException e) {
-        	log.info(e.getMessage());
-        	return Response.status(Status.NOT_FOUND).build();
+            log.info(e.getMessage());
+            Response.ResponseBuilder rb = Response.status(Status.NOT_FOUND);
+            if (StringUtils.isNotBlank(vtjIssue)) {
+                rb.header(VtjIssue.REQUEST_IDENTIFIER_HEADER, vtjIssue);
+            }
+            return rb.build();
         } catch (Exception e) {
-        	log.warning(e.getMessage(), e);
-            return Response.serverError().build();
+            log.warning(e.getMessage(), e);
+            Response.ResponseBuilder rb = Response.serverError();
+            if (StringUtils.isNotBlank(vtjIssue)) {
+                rb.header(VtjIssue.REQUEST_IDENTIFIER_HEADER, vtjIssue);
+            }
+            return rb.build();
         }
     }
 }

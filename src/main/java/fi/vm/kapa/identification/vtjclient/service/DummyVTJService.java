@@ -101,8 +101,7 @@ public class DummyVTJService implements VTJService {
 "                     <TurvakieltoTieto/>\n" +
 "                  </Turvakielto>\n" +
 "               </Henkilo>";
-    InputSource inputSource;  
-    
+
     private DummyVTJService() {
         this.personService = null;
         this.dummyDataDeviator = null;
@@ -112,7 +111,6 @@ public class DummyVTJService implements VTJService {
         this.personService = personService;
         this.dummyDataDeviator = dummyDataDeviator;
         factory = new ObjectFactory();
-        inputSource = new InputSource( new StringReader( dummySoap ) );
     }
 
     @Override
@@ -147,6 +145,7 @@ public class DummyVTJService implements VTJService {
     
     private void dummyUnMarshal() {
         JAXBContext context;
+        InputSource inputSource = new InputSource( new StringReader( dummySoap ) );
         try {
             context = JAXBContext
                     .newInstance(VTJResponseMessage.class);

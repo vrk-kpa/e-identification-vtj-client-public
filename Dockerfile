@@ -2,8 +2,6 @@
 FROM e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/e-identification-base-java-service
 COPY target/site /site
 
-# Define JAVA_HOME
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Deploy project
 RUN mkdir -p /opt/e-identification/vtj-client/
